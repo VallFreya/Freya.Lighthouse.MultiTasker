@@ -5,8 +5,10 @@ module.exports = {
         "https://pikabu.ru",
         "https://yandex.ru"
     ],
-    emulatedFormFactors: ["desktop", ],
-    throttlingMethods: ["provided",]
+    emulatedFormFactors: ["desktop"],
+    throttlingMethods: ["provided"],
+    repeat: 3,
+    withFullReport: false
 }
 
 
@@ -20,5 +22,6 @@ module.exports = {
     ],
     emulatedFormFactors = [
         desktop, mobile
-    ]
+    ],
+    repeat: 3
 */

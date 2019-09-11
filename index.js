@@ -35,8 +35,11 @@ async function launchChromeAndRunLighthouse(url, opts, config = null) {
       var filename = opts.site + "_" + opts.emulatedFormFactor + "_" + opts.throttlingMethod;
       var time =  [new Date().getHours(),new Date().getMinutes(), new Date().getSeconds()]
       .join("_");
-      var pathResult = "results/" + date + "/" + time + "_" +filename + ".json";
-      writeToFile(pathResult, JSON.stringify(results.lhr));
+      if (opts.fullRepost){
+        var pathResult = "results/" + date + "/" + time + "_" +filename + ".json";
+        writeToFile(pathResult, JSON.stringify(results.lhr));
+      }
+      
       var pathAllResults = "results/" +  date + "/result.txt";
       var performanceSiteValue = filename + ": " + results.lhr.categories.performance.score + "\n";
       writeToFile(pathAllResults, performanceSiteValue);
@@ -63,16 +66,20 @@ async function Run() {
   for (var i = 0; i < config.sites.length; i++) {
     for (var j = 0; j < config.emulatedFormFactors.length; j++) {
       for (var k = 0; k < config.throttlingMethods.length; k++) {
-        console.log("run audits for site " + config.sites[i] + " with emulatedFormFactor " + config.emulatedFormFactors[j] + " and throttlingMethod " + config.throttlingMethods[k]);
-        var standardOption = "--show-paint-rects --allow-insecure-localhost --ignore-certificate-errors";
-        opts.emulatedFormFactor = config.emulatedFormFactors[j];
-        opts.site = config.sites[i];
-        opts.throttlingMethod = config.throttlingMethods[k];
-        opts.chromeFlags = [standardOption];
-        //await launchChromeAndRunLighthouse(sites[i], opts).then(results => {
-        // Use results!
-        //});
-        await launchChromeAndRunLighthouse(config.sites[i], opts);
+        var repeat = config.repeat ? config.repeat : 1;
+        for (var r = 0; r < repeat; r++) {
+          console.log("run audits for site " + config.sites[i] + " with emulatedFormFactor " + config.emulatedFormFactors[j] + " and throttlingMethod " + config.throttlingMethods[k]);
+          var standardOption = "--show-paint-rects --allow-insecure-localhost --ignore-certificate-errors";
+          opts.emulatedFormFactor = config.emulatedFormFactors[j];
+          opts.site = config.sites[i];
+          opts.throttlingMethod = config.throttlingMethods[k];
+          opts.chromeFlags = [standardOption];
+          opts.fullRepost = config.withFullReposrt ? config.withFullReposrt : false;
+          //await launchChromeAndRunLighthouse(sites[i], opts).then(results => {
+          // Use results!
+          //});
+          await launchChromeAndRunLighthouse(config.sites[i], opts);
+        }
       }
     }
   }
