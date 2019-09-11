@@ -32,7 +32,7 @@ module.exports = {
 `withFullReport`: для каждого запуска сохраняет подробную аналитику в файл json
 
 ### Доступные варианты throttlingMethods и emulatedFormFactors
-
+```
 throttlingMethods = [
     devtools: applied slow, 
     provided: no restrictions,
@@ -41,7 +41,7 @@ throttlingMethods = [
 emulatedFormFactors = [
     desktop, mobile
 ]
-
+```
 ## Результат
 Результатом работы программы является файл в папке `/results/result.txt` с значениями `performance`
 
